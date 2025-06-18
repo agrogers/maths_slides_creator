@@ -39,11 +39,19 @@ question_type = {
         "place_value_reverse": [{"qty":10, "min": 10, "max": 99, "tiers": range(3,6), "fontsize": 80}],
     },
     2: {
-        "add": [{"qty":25, "min": 0, "max": 50, "tiers": range(1,5)}],
-        "add3": [{"qty":25, "min": 0, "max": 10, "tiers": range(3,5)}],
-        "subtract": [{"qty":25, "min": 0, "max": 50, "tiers": range(2,5)}],
-        "multiply": [{"qty":25, "min": 1, "max": 30, "tiers": range(3,5)}],
-        "divide": [{"qty":15, "min": 1, "max": 30, "tiers": range(3,5)}],
+        "add": [
+            {"qty":30, "min": 0, "max": 10, "tiers": range(1,2)},
+            {"qty":15, "min": 5, "max": 40, "tiers": range(2,3)}
+        ],
+        "add3": [
+            {"qty":15, "min": 1, "max": 10, "tiers": range(4,6)}],
+        "subtract": [
+            {"qty":15, "min": 0, "max": 20, "tiers": range(2,3)},
+            {"qty":20, "min": 0, "max": 20, "tiers": range(3,5)}
+        ],
+        "multiply": [{"qty":20, "min": 1, "max": 10, "tiers": range(3,6)}],
+        "place_value": [{"qty":10, "min": 1, "max": 999, "tiers": range(3,5), "fontsize": 80}],
+        "place_value_reverse": [{"qty":10, "min": 10, "max": 9999, "tiers": range(3,6), "fontsize": 80}],
     },
     3: {
         "add": [{"qty":20, "min": 10, "max": 100, "tiers": range(1,5)}],
@@ -413,7 +421,7 @@ def set_slide_background(slide, red, green, blue):
 def main():
     # Generate questions for each level
     for level in question_type:
-        if level != 4:
+        if level != 2:
             continue
 
         print(f"\nLevel {level} Questions:")
