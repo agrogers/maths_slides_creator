@@ -8,8 +8,11 @@ from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
 from pptx.dml.color import RGBColor
 import re
 from fractions import Fraction
-from sympy import isprime
+from sympy import symbols, Eq, solve, isprime
 
+x = symbols('x')
+
+levels_to_generate = [1,2,3,4,5,6,7,8,9]
 # Simple color name to RGB map
 COLOR_MAP = {
     "black": RGBColor(0, 0, 0),
@@ -18,6 +21,7 @@ COLOR_MAP = {
     "green": RGBColor(0, 128, 0),
     "dark_gray": RGBColor(100, 100, 100),
 }
+
 fractions_unicode = {
     "1/2": "½",
     "1/3": "⅓", "2/3": "⅔",
@@ -25,102 +29,262 @@ fractions_unicode = {
     "1/5": "⅕", "2/5": "⅖", "3/5": "⅗", "4/5": "⅘",
     "1/6": "⅙", "5/6": "⅚",
     "1/7": "⅐", "2/7": "²⁄₇", "3/7": "³⁄₇", "4/7": "⁴⁄₇", "5/7": "⁵⁄₇", "6/7": "⁶⁄₇",
-    "1/8": "⅛", "3/8": "⅜", "5/8": "⅝", "7/8": "⅞"
+    "1/8": "⅛", "3/8": "⅜", "5/8": "⅝", "7/8": "⅞",
+    "1/9": "⅑", "2/9": "²⁄₉", "4/9": "⁴⁄₉", "5/9": "⁵⁄₉", "7/9": "⁷⁄₉", "8/9": "⁸⁄₉",
 }
+# 'ax+b=c', 'a(x+b)=c', 'x+a=c', 'x-a=c', 'a*x=c'
 question_type = {
     1: {
         "add": [
-            {"qty":30, "min": 0, "max": 7, "tiers": range(1,2)},
-            {"qty":30, "min": 5, "max": 20, "tiers": range(2,3)}
+            {"qty":30, "min": 0, "max": 6, "tiers": [1]},
+            {"qty":30, "min": [1,10], "max": [7,13], "tiers": [2]},
+            {"qty":30, "min": 10, "max": 25, "tiers": [3,4]},
         ],
-        "subtract": [{"qty":20, "min": 0, "max": 20, "tiers": range(3,5)}],
-        "multiply": [{"qty":20, "min": 1, "max": 10, "tiers": range(3,6)}],
-        "place_value": [{"qty":10, "min": 1, "max": 99, "tiers": range(3,5), "fontsize": 80}],
-        "place_value_reverse": [{"qty":10, "min": 10, "max": 99, "tiers": range(3,6), "fontsize": 80}],
+        "subtract": [
+            {"qty":30, "min": 1, "max": 20, "tiers": [3,4]},
+            ],
+        "multiply": [{"qty":10, "min": 1, "max": 5, "tiers": [4]}],
+        "place_value": [{"qty":20, "min": 1, "max": 99, "tiers": [3,4], "fontsize": 80}],
+        "place_value_reverse": [{"qty":20, "min": 10, "max": 99, "tiers": [3,4,5], "fontsize": 80}],
     },
     2: {
         "add": [
-            {"qty":30, "min": 0, "max": 10, "tiers": range(1,2)},
-            {"qty":15, "min": 5, "max": 40, "tiers": range(2,3)}
+            {"qty":30, "min": 1, "max": 9, "tiers": [1]},
+            {"qty":15, "min": [2,10], "max": [9,20], "tiers": [2]},
+            {"qty":30, "min": 10, "max": 30, "tiers": [3,4]},
         ],
         "add3": [
-            {"qty":15, "min": 1, "max": 10, "tiers": range(4,6)}],
+            {"qty":15, "min": 1, "max": 10, "tiers": [4,5]},],
         "subtract": [
-            {"qty":15, "min": 0, "max": 20, "tiers": range(2,3)},
-            {"qty":20, "min": 0, "max": 20, "tiers": range(3,5)}
+            {"qty":15, "min": 1, "max": 20, "tiers": [2]},
+            {"qty":20, "min": 5, "max": 30, "tiers": [3,4]}
         ],
-        "multiply": [{"qty":20, "min": 1, "max": 10, "tiers": range(3,6)}],
-        "place_value": [{"qty":10, "min": 1, "max": 999, "tiers": range(3,5), "fontsize": 80}],
-        "place_value_reverse": [{"qty":10, "min": 10, "max": 9999, "tiers": range(3,6), "fontsize": 80}],
+        "multiply": [{"qty":20, "min": 1, "max": 10, "tiers": [3,4,5]}],
+        "place_value": [{"qty":10, "min": 1, "max": 999, "tiers": [3,4], "fontsize": 80}],
+        "place_value_reverse": [{"qty":10, "min": 10, "max": 9999, "tiers": [3,4,5], "fontsize": 80}],
     },
     3: {
-        "add": [{"qty":20, "min": 10, "max": 100, "tiers": range(1,5)}],
-        "subtract": [{"qty":20, "min": 10, "max": 100, "tiers": range(2,5)}],
-        "multiply": [{"qty":30, "min": 1, "max": 50, "tiers": range(3,5)}],
-        "divide": [{"qty":15, "min": 1, "max": 50, "tiers": range(3,5)}],
+        "add": [
+            {"qty":15, "min": 5, "max": 10, "tiers": [1]},
+            {"qty":10, "min": 10, "max": 50, "tiers": [2]},
+            {"qty":10, "min": [2,15], "max": [9,30], "tiers": [2]},
+            ],
+        "subtract": [
+            {"qty":15, "min": 5, "max": 15, "tiers": [1]},
+            {"qty":10, "min": 10, "max": 20, "tiers": [2]}
+            ],
+        "add3": [
+            {"qty":20, "min": 1, "max": 20, "tiers": [3,4]}],
+        "multiply": [
+            {"qty":15, "min": 2, "max": 5, "tiers": [3]},
+            {"qty":20, "min": 4, "max": 10, "tiers": [4,5]},
+            ],
+        "divide": [
+            {"qty":20, "min": 1, "max": 20, "tiers": [3,4]}],
+        "place_value_reverse": [
+            {"qty":20, "min": 100, "max": 9999, "tiers": [4,5], "fontsize": 80}],
     },
     4: {
         "add": [
-            {"qty":15, "min": 10, "max": 30, "tiers": range(1,2)},
-            {"qty":10, "min": 100, "max": 1000, "tiers": range(3,4)},
-            {"qty":10, "min": 1000, "max": 5000, "tiers": range(4,5)},
+            {"qty":15, "min": [2,10], "max": [9,15], "tiers": [1]},
+            {"qty":15, "min": 5, "max": 15, "tiers": [1]},
+            {"qty":15, "min": 10, "max": 20, "tiers": [2]},
             ],
         "add3": [
-            {"qty":15, "min": 5, "max": 20, "tiers": range(2,3)}],
+            {"qty":15, "min": 2, "max": 10, "tiers": [2]}],
         "add_fraction_same_denominator": [
-            {"qty":10, "min": 20, "max": 99, "tiers": range(3,5)}],
+            {"qty":15, "min": 2, "max": 10, "tiers": [3,4]}],
         "add_fraction_different_denominator": [
-            {"qty":10, "min": 20, "max": 99, "tiers": range(4,6)}],
+            {"qty":15, "min": 2, "max": 6, "tiers": [4,5]}],
         "subtract": [
-            {"qty":15, "min": 10, "max": 50, "tiers": range(1,2)},
-            {"qty":15, "min": 100, "max": 1000, "tiers": range(3,5)},
+            {"qty":15, "min": 5, "max": 20, "tiers": [1]},
+            {"qty":15, "min": 10, "max": 40, "tiers": [3,4]},
             ],
         "multiply": [
-            {"qty":15, "min": 3, "max": 7, "tiers": range(2,3)},
-            {"qty":15, "min": 5, "max": 10, "tiers": range(3,5)},
+            {"qty":15, "min": 3, "max": 7, "tiers": [3]},
+            {"qty":15, "min": 5, "max": 10, "tiers": [3,4]},
             ],
         "divide": [
-            {"qty":20, "min": 2, "max": 100, "tiers": range(3,6)}],
+            {"qty":20, "min": 2, "max": 100, "tiers": [3,4,5]}],
         "place_value_reverse": [
-            {"qty":15, "min": 10, "max": 9999, "tiers": range(3,5), "fontsize": 70}],
+            {"qty":20, "min": 10, "max": 9999, "tiers": [3,4], "fontsize": 70}],
     },
     5: {
         "add": [
-            {"qty":15, "min": 10, "max": 30, "tiers": range(1,2)},
-            {"qty":15, "min": 20, "max": 100, "tiers": range(2,3)},
-            {"qty":10, "min": 100, "max": 1000, "tiers": range(3,4)},
-            {"qty":10, "min": 1000, "max": 5000, "tiers": range(4,5)},
+            {"qty":30, "min": [2,9], "max": [9,20], "tiers": [1]},
+            {"qty":15, "min": 10, "max": 30, "tiers": [2]},
+            {"qty":10, "min": 15, "max": 50, "tiers": [3,4,5]},
             ],
-        "add3": [{"qty":10, "min": 20, "max": 99, "tiers": range(3,5)}],
-        "add_dec": [{"qty":10, "min": 0, "max": 20, "tiers": range(3,5)}],
+        "add3": [{"qty":10, "min": 5, "max": 15, "tiers": [3,4]}],
         "subtract": [
-            {"qty":15, "min": 20, "max": 100, "tiers": range(2,3)},
-            {"qty":15, "min": 100, "max": 1000, "tiers": range(3,5)},
+            {"qty":15, "min": 5, "max": 20, "tiers": [2]},
+            {"qty":15, "min": 15, "max": 40, "tiers": [3,4]},
             ],
         "multiply": [
-            {"qty":15, "min": 3, "max": 7, "tiers": range(2,3)},
-            {"qty":15, "min": 5, "max": 10, "tiers": range(3,5)},
+            {"qty":15, "min": 3, "max": 10, "tiers": [3]},
             ],
-        "divide": [{"qty":15, "min": 2, "max": 100, "tiers": range(3,5)}],
-    },
+        "divide": [
+            {"qty":15, "min": 2, "max": 100, "tiers": [4,5]}],
+        "place_value_reverse": [
+            {"qty":15, "min": 100, "max": 9999, "tiers": [3,4,5], "fontsize": 70}],
+        "add_dec1": [
+            {"qty":10, "min": 1, "max": 10, "tiers": [4,5]}],
+        "add_fraction_same_denominator": [
+            {"qty":15, "min": 2, "max": 10, "tiers": [3,4]}],
+        "add_fraction_different_denominator": [
+            {"qty":15, "min": 2, "max": 7, "tiers": [4,5]}],
 
+    },
+    6: {
+        "add": [
+            {"qty":15, "min": 10, "max": 30, "tiers": [1]},
+            {"qty":15, "min": 20, "max": 60, "tiers": [2]},
+            ],
+        "add3": [{"qty":10, "min": 10, "max": 40, "tiers": [3,4]}],
+        "perc10": [
+            {"qty":10, "min": 10, "max": 500, "tiers": [3,4]}
+            ],
+        "add_dec1": [{"qty":10, "min": 1, "max": 10, "tiers": [4,5]}],
+        "subtract": [
+            {"qty":15, "min": 5, "max": 15, "tiers": [1]},
+            {"qty":15, "min": 10, "max": 20, "tiers": [2]},
+            {"qty":15, "min": 15, "max": 50, "tiers": [3,4]},
+            ],
+        "multiply": [
+            {"qty":30, "min": 3, "max": 10, "tiers": [3]},
+            ],
+        "divide": [
+            {"qty":15, "min": 2, "max": 40, "tiers": [4,5]}],
+        "place_value_reverse": [
+            {"qty":15, "min": 1000, "max": 99999, "tiers": [3,4,5], "fontsize": 70}],
+        "add_fraction_same_denominator": [
+            {"qty":10, "min": 2, "max": 10, "tiers": [3]}],
+        "add_fraction_different_denominator": [
+            {"qty":10, "min": 2, "max": 9, "tiers": [4]}],
+
+    },
+    7: {
+        "add": [
+            {"qty":15, "min": 7, "max": 25, "tiers": [1]},
+            {"qty":10, "min": 10, "max": 50, "tiers": [2]},
+            ],
+        "add3": [{"qty":20, "min": 10, "max": 50, "tiers": [3,4]}],
+        "perc10": [
+            {"qty":10, "min": 10, "max": 500, "tiers": [3,4]}
+            ],
+        "add_dec1": [
+            {"qty":10, "min": 1, "max": 20, "tiers": [4,5]}],
+        "subtract": [
+            {"qty":15, "min": 5, "max": 20, "tiers": [1]},
+            {"qty":10, "min": 10, "max": 30, "tiers": [2]},
+            {"qty":10, "min": 10, "max": 50, "tiers": [3,4]},
+            ],
+        "multiply": [
+            {"qty":10, "min": 6, "max": 10, "tiers": [2]},
+            ],
+        "divide<11": [
+            {"qty":10, "min": 2, "max": 80, "tiers": [4,5]}],
+        "place_value_reverse": [
+            {"qty":15, "min": 1000, "max": 99999, "tiers": [3,4,5], "fontsize": 70}],
+        "add_fraction_same_denominator": [
+            {"qty":10, "min": 2, "max": 9, "tiers": [3]}],
+        "add_fraction_different_denominator": [
+            {"qty":20, "min": 2, "max": 9, "tiers": [4,5]}],
+        "linear_equation_a*x=c": [
+            {"qty":15, "min": -10, "max": 10, "tiers": [3,4], "fontsize": 90},
+            ],
+    },
+    8: {
+        "add": [
+            {"qty":15, "min": 10, "max": 30, "tiers": range(1,2)},
+            {"qty":10, "min": 20, "max": 60, "tiers": range(2,3)},
+            ],
+        "add3": [{"qty":10, "min": 10, "max": 50, "tiers": range(3,5)}],
+        "perc10": [
+            {"qty":10, "min": 10, "max": 500, "tiers": range(3,5)}
+            ],
+        "add_dec1": [{"qty":10, "min": 1, "max": 20, "tiers": range(4,6)}],
+        "subtract": [
+            {"qty":15, "min": 5, "max": 30, "tiers": range(1,2)},
+            {"qty":10, "min": 10, "max": 50, "tiers": range(2,5)},
+            ],
+        "linear_equation_a*x=c": [
+            {"qty":15, "min": -10, "max": 10, "tiers": range(3,4), "fontsize": 90},
+            ],
+        "linear_equation_a(x+b)=c": [
+            {"qty":15, "min": -10, "max": 10, "tiers": range(4,5), "fontsize": 90},
+            ],
+        "linear_equation_ax+b=c": [
+            {"qty":15, "min": -10, "max": 10, "tiers": range(4,5), "fontsize": 90},
+            ],
+        "multiply": [
+            {"qty":10, "min": 6, "max": 10, "tiers": range(3,4)},
+            ],
+        "divide<11": [
+            {"qty":10, "min": 2, "max": 80, "tiers": range(4,6)}],
+        "place_value_reverse": [
+            {"qty":10, "min": 1000, "max": 99999, "tiers": range(3,6), "fontsize": 70}],
+        "add_fraction_same_denominator": [
+            {"qty":10, "min": 2, "max": 9, "tiers": range(2,3)}],
+        "add_fraction_different_denominator": [
+            {"qty":10, "min": 2, "max": 9, "tiers": range(4,6)}],
+    },
+    9: {
+        "add": [
+            {"qty":15, "min": 10, "max": 30, "tiers": [1]},
+            {"qty":15, "min": [-10,1], "max": [-1,10], "tiers": [2]},
+            {"qty":15, "min": [-10,-10], "max": [-1,-1], "tiers": [3,4]},
+            ],
+        "add3": [
+            {"qty":10, "min": 10, "max": 70, "tiers": [3,4]}],
+        "perc10": [
+            {"qty":20, "min": 10, "max": 1000, "tiers": [3,4,5]}],
+        "add_dec1": [{"qty":20, "min": 1, "max": 20, "tiers": [4,5]}],
+        "subtract": [
+            {"qty":15, "min": 5, "max": 20, "tiers": [1]},
+            {"qty":15, "min": 7, "max": 40, "tiers": [2]},
+            {"qty":20, "min": 7, "max": 60, "tiers": [3,4,5]},
+            {"qty":15, "min": [10,-20], "max": [50,-2], "tiers": [3,4,5]},
+            ],
+        "linear_equation_a*x=c": [
+            {"qty":15, "min": -10, "max": 10, "tiers": [3], "fontsize": 90},
+            ],
+        "linear_equation_a(x+b)=c": [
+            {"qty":15, "min": -10, "max": 10, "tiers": [4], "fontsize": 90},
+            ],
+        "linear_equation_ax+b=c": [
+            {"qty":15, "min": -10, "max": 10, "tiers": [4], "fontsize": 90},
+            ],
+        "multiply": [
+            {"qty":10, "min": 6, "max": 10, "tiers": [3]},
+            ],
+        "divide<11": [
+            {"qty":10, "min": 2, "max": 80, "tiers": [4,5]}],
+        "place_value_reverse": [
+            {"qty":10, "min": 1000, "max": 999999, "tiers": [3,4,5], "fontsize": 70}],
+        "add_fraction_different_denominator": [
+            {"qty":20, "min": 2, "max": 9, "tiers": [3,4,5]}],
+    },
 }
+
+def unicode_fraction(numerator, denominator):
+    super_digits = {
+        '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹', '-': '⁻'
+    }
+    sub_digits = {
+        '0': '₀', '1': '₁', '2': '₂', '3': '₃', '4': '₄', '5': '₅', '6': '₆', '7': '₇', '8': '₈', '9': '₉', '-': '₋'
+    }
+    def to_super(num):
+        return ''.join(super_digits.get(ch, ch) for ch in str(num))
+
+    def to_sub(num):
+        return ''.join(sub_digits.get(ch, ch) for ch in str(num))
+    
+    return f"{to_super(numerator)}⁄{to_sub(denominator)}"  # Using Unicode fraction slash (U+2044)
 
 def add_textbox(slide, text, left, top, width, height, default_font_size=44, 
                 default_color = COLOR_MAP['black'], bold=True, 
                 align=PP_ALIGN.CENTER, valign=MSO_ANCHOR.MIDDLE):
-    # txBox = slide.shapes.add_textbox(left, top, width, height)
-    # tf = txBox.text_frame
-    # p = tf.paragraphs[0]
-    # run = p.add_run()
-    # run.text = text
-    # font = run.font
-    # font.size = Pt(font_size)
-    # font.bold = bold
-    # p.alignment = align
-    # if valign:
-    #     tf.vertical_anchor = MSO_ANCHOR.BOTTOM
-    # return txBox
 
     def parse_size(size_str, default_size_pt):
         if not size_str:
@@ -131,11 +295,15 @@ def add_textbox(slide, text, left, top, width, height, default_font_size=44,
         else:
             return float(size_str)
 
-    def add_run(paragraph, text, size, color):
+    def add_run(paragraph, text, size, color, italic=False, font_name=None, bold=False):
         run = paragraph.add_run()
         run.text = text
         run.font.size = Pt(size)
         run.font.color.rgb = color
+        run.font.bold = bold
+        run.font.italic = italic
+        if font_name:
+            run.font.name = font_name        
         return run
 
     textbox = slide.shapes.add_textbox(left, top, width, height)
@@ -143,10 +311,15 @@ def add_textbox(slide, text, left, top, width, height, default_font_size=44,
     text_frame.word_wrap = True  # This is default, but explicitly set it
     text_frame.clear()
     p = text_frame.paragraphs[0]
-    p.line_spacing = 0.8  # proportion, not points
+    p.line_spacing = 0.9  # proportion, not points
 
     pattern = re.compile(
-        r'<font(?:\s+size=([\d]+%?))?(?:\s+color=(\w+))?\s*>(.*?)</font>',
+        r'<font'                                               # Start of tag
+        r'(?:\s+size=([\d]+%?))?'                              # Group 1: size
+        r'(?:\s+color=(\w+))?'                                 # Group 2: color
+        r'(?:\s+italic=(true|false))?'                         # Group 3: italic
+        r'(?:\s+font=(?:"([^"]+)"|\'([^\']+)\'|(\S+)))?'       # Groups 4–6: font name
+        r'\s*>(.*?)</font>',                                   # Group 7: inner text
         re.DOTALL
     )
 
@@ -155,19 +328,20 @@ def add_textbox(slide, text, left, top, width, height, default_font_size=44,
     last_end = 0
 
     for match in matches:
-        # Default-formatted text before the match
         if match.start() > last_end:
             add_run(p, text[last_end:match.start()], default_font_size, default_color)
 
         size_str = match.group(1)
         color_str = match.group(2)
-        content = match.group(3)
+        italic_str = match.group(3)
+        font_name = match.group(4) or match.group(5) or match.group(6)
+        content = match.group(7)
 
         size = parse_size(size_str, default_font_size)
         color = COLOR_MAP.get(color_str.lower(), default_color) if color_str else default_color
-        content = match.group(3)
+        italic = italic_str.lower() == "true" if italic_str else False
 
-        add_run(p, content, size, color)
+        add_run(p, content, size, color, italic=italic, font_name=font_name)
         last_end = match.end()
 
     # Remaining plain text after last match
@@ -184,6 +358,14 @@ def generate_number(min_val, max_val, tier, tier_range):
     # Total number of tiers
     num_tiers = len(tier_range)
 
+    # We can pass in list of min_val and max_val for some operations so need to handle that. 
+    # The operation will pull the value it wants and pass it to this function.
+    if isinstance(min_val, list):
+        min_val = min_val[0]
+        
+    if isinstance(max_val, list):
+        max_val = max_val[0]
+        
     # Size of each tier range
     range_size = (max_val - min_val + 1) / num_tiers  # +1 to include max_val
 
@@ -193,8 +375,8 @@ def generate_number(min_val, max_val, tier, tier_range):
     tier_max = int(min_val + (tier_index + 1) * range_size - 1)
 
     # Clamp to global min and max to avoid overshooting
-    tier_min = max(min_val, tier_min)
-    tier_max = min(max_val, tier_max)
+    tier_min = int(max(min_val, tier_min))
+    tier_max = int(min(max_val, tier_max))
 
     return random.randint(tier_min, tier_max)
 
@@ -220,44 +402,105 @@ def generate_question(op_type, min_val, max_val, tier, tier_range):
         if frac.denominator == 1:
             return str(frac.numerator)
         mixed = divmod(frac.numerator, frac.denominator)
-        frac_str = f"{mixed[1]}/{frac.denominator}"
-        pretty = fractions_unicode.get(frac_str, frac_str)
-        return f"{mixed[0]}{pretty}" if mixed[0] > 0 else pretty
+        pretty = unicode_fraction(mixed[1], frac.denominator)
+
+        if mixed[0] > 0:
+            return f"{mixed[0]}{pretty}"  
+        else:
+            return pretty
     
+    def linear_equation(op_type, min_val, max_val, tier, tier_range):
+        a = generate_number(min_val, max_val, tier, tier_range)
+        b = generate_number(min_val, max_val, tier, tier_range)
+        xa = generate_number(min_val, max_val, tier, tier_range)  # known solution
+        x = "<font size=120% italic=true font='Times New Roman'>x</font>"  # x with a subscript
+
+        form = op_type.split("_equation_")[-1]
+
+        if form == 'ax+b=c':
+            c = a * xa + b
+            equation = f"{a}{x} + {b} = {c}"
+
+        elif form == 'a(x+b)=c':
+            c = a * (xa + b)
+            equation = f"{a}({x} + {b}) = {c}"
+
+        elif form == 'x+a=c':
+            c = xa + a
+            equation = f"{x} + {a} = {c}"
+
+        elif form == 'x-a=c':
+            c = xa - a
+            equation = f"{x} - {a} = {c}"
+
+        elif form == 'a*x=c':
+            c = a * xa
+            equation = f"{a}{x} = {c}"
+
+        return equation, xa
+
     if op_type == "add":
+
+        if isinstance(min_val, list) and isinstance(max_val, list):
+            b = generate_number(min_val[1], max_val[1], tier, tier_range)
+
         question = f"{a} + {b}"
         answer = a + b
-        return question, str(answer)
+        return question, f"{answer:,}"
+    
+    elif op_type.startswith("linear_equation"):
+        question, answer = linear_equation(op_type, min_val, max_val, tier, tier_range)
+        return question, f"{answer:,}"
     
     elif op_type == "add3":  # New operation for adding three numbers
         c = generate_number(min_val, max_val, tier, tier_range)
         question = f"{a} + {b} + {c}"
         answer = a + b + c
-        return question, str(answer)  
+        return question, f"{answer:,}"
       
-    elif op_type == "add_dec":  # New operation for adding decimals
+    elif op_type == "add_dec1":  # New operation for adding decimals
         a = generate_number(min_val*10, max_val*10, tier, tier_range) / 10
         b = generate_number(min_val*10, max_val*10, tier, tier_range) / 10
-        question = f"{a} + {b}"
+        question = f"{a:.1f} + {b:.1f}"
         answer = a + b
-        return question, f"{answer:.1f}"
-    
+        return question, f"{answer:,.1f}"
+
+    elif op_type == "perc10":  # New operation for adding decimals
+        p = random.randint(1, 9) * 10
+        b = int(b / 10) * 10  # Ensure b is a multiple of 10
+        question = f"{p}% of {b:,}"
+        answer = b * (p / 100)
+        return question, f"{int(answer):,}" if answer == int(answer) else f"{answer:,}"
+
     elif op_type == "subtract":
-        # Ensure non-negative result by making a >= b
-        if a < b:
+        if isinstance(min_val, list) and isinstance(max_val, list): # If we are controlling the range precisely then we probably dont care if it yields a negative result
+            b = generate_number(min_val[1], max_val[1], tier, tier_range)
+        elif a < b:      # Ensure non-negative result by making a >= b
             a, b = b, a  # Swap if a < b
+        if a == b:
+            a += 1
         question = f"{a} - {b}"
         answer = a - b
-        return question, str(answer)
+        return question, f"{answer:,}"
 
     elif op_type == "multiply":
         question = f"{a} × {b}"
         answer = a * b
-        return question, str(answer)
+        return question, f"{answer:,}"
+
+    elif op_type == "divide<11":
+        d = random.randint(2, 10)  # Denominator between 1 and 10
+        b = generate_number(d, max_val, tier, tier_range)
+        a = int(b/d)
+
+        product = a * d
+        question = f"{product} ÷ {d}"
+        answer = a
+        return question, f"{answer:,}"
 
     elif op_type == "divide":
         a = generate_number(min_val, max_val / 2, tier, tier_range)
-        if a== 0:
+        if a == 0:
             a = 1
         new_max_val = int(max_val // a)  # work out the max product to still fit between our range
         if new_max_val <3:
@@ -269,31 +512,41 @@ def generate_question(op_type, min_val, max_val, tier, tier_range):
         product = a * b
         question = f"{product} ÷ {b}"
         answer = a
-        return question, str(answer)
+        return question, f"{answer:,}"
 
     elif op_type == "add_fraction_same_denominator":
-        same_denom = [2, 3, 4, 5, 6, 8]
-        denom = random.choice(same_denom)
+        denoms = range(min(a,b), max(a,b)+1)
+        if len(denoms) == 1:
+            denom = denoms[0]
+        else:
+            denom = random.choice(denoms)
         a_num = random.randint(1, denom - 1)
-        b_num = random.randint(1, denom - a_num)  # ensure < 1
+        # b_num = random.randint(1, denom - a_num)  # ensure < 1
+        b_num = random.randint(1, denom )
         a = Fraction(a_num, denom)
         b = Fraction(b_num, denom)
 
         answer = a + b
-        question = f"{pretty_fraction(a)} + {pretty_fraction(b)}"
+        question = f"{unicode_fraction(a_num, denom)} + {unicode_fraction(b_num, denom)}"
         return question, pretty_fraction(answer)
 
     elif op_type == "add_fraction_different_denominator":
-        denoms = [2, 3, 4, 5, 6, 7, 8]
-        denom_a, denom_b = random.sample(denoms, 2)  # ensure different denominators
-        a_num = random.randint(1, denom_a - 1)
-        b_num = random.randint(1, denom_b - 1)
+        if a==b:
+            b += 1
+        denoms = range(min(a,b), max(a,b)+1)
+        # if len(denoms) == 1:
+        #     denom = denoms[0]
+        # else:
+        #     denom = random.choice(denoms)
+        denom_af, denom_bf = random.sample(denoms, 2)  # ensure different denominators
+        af_num = random.randint(1, denom_af - 1)
+        bf_num = random.randint(1, denom_bf - 1)
         
-        a = Fraction(a_num, denom_a)
-        b = Fraction(b_num, denom_b)
-        answer = a + b
+        af = Fraction(af_num, denom_af)
+        bf = Fraction(bf_num, denom_bf)
+        answer = af + bf
 
-        question = f"{pretty_fraction(a)} + {pretty_fraction(b)}"
+        question = f"{pretty_fraction(af)} + {pretty_fraction(bf)}"
         return question, pretty_fraction(answer)
 
     elif op_type == "place_value":
@@ -310,7 +563,7 @@ def generate_question(op_type, min_val, max_val, tier, tier_range):
 
         question = f"<font size=75% color=dark_gray>What is</font>\n{' + '.join(output)}?"
         answer = a 
-        return question, str(answer)
+        return question, f"{answer:,}"
 
     elif op_type == "place_value_reverse":
         place_names = ["ones", "tens", "hundreds", "thousands", "ten-thousands", "hundred-thousands", 
@@ -336,10 +589,9 @@ def generate_question(op_type, min_val, max_val, tier, tier_range):
         place = place_names[place_index] if place_index < len(place_names) else f"10^{place_index}"
         place_value = digit * (10 ** place_index)
 
-        question = f"<font size=75% color=dark_gray>What value is the </font>\n{digit} in {number}?"
-        answer = str(place_value)
-
-        return question, answer
+        question = f"<font size=75% color=dark_gray>What value is the </font>\n{digit} in {number:,}?"
+        answer = place_value
+        return question, f"{answer:,}"
     
     elif op_type == "fraction":
         # Generate fraction addition
@@ -421,7 +673,7 @@ def set_slide_background(slide, red, green, blue):
 def main():
     # Generate questions for each level
     for level in question_type:
-        if level != 2:
+        if level not in levels_to_generate:
             continue
 
         print(f"\nLevel {level} Questions:")
@@ -452,7 +704,7 @@ def main():
                 # --- Create a Tier slide ---
                 slide_t = prs.slides.add_slide(prs.slide_layouts[6])  
                 set_slide_background(slide_t, 250, 210, 180)
-                add_textbox(slide_t, f"<font size=40%>YEAR {level}</font>\nRound {tier}\n\n<font size=60%>{tier_count} Questions</font>", left=left, top=Inches(1), width=width, height=Inches(2), default_font_size=100)
+                add_textbox(slide_t, f"<font size=40%>YEAR {level}</font>\nRound {tier}\n\n<font size=60%>{tier_count} Questions</font>", left=left, top=Inches(1.5), width=width, height=Inches(2), default_font_size=100)
                 prev_tier = tier
                 question_number = 0
 
@@ -466,6 +718,10 @@ def main():
             # Tier information
             t_box = add_textbox(slide_q, f"Round {tier}", prs.slide_width-Inches(3), prs.slide_height-Inches(1), Inches(3), Inches(1), default_font_size=18, align=PP_ALIGN.RIGHT, valign=MSO_ANCHOR.BOTTOM)
             t_box.text_frame.paragraphs[0].runs[0].font.color.rgb = RGBColor(180, 180, 180)  # Gray text
+            # Add an image (adjust path and size as needed)
+            img_path = 'spin_clock.webp'  # e.g. 'my_image.png'
+            # Insert image
+            slide_q.shapes.add_picture(img_path, left=width-Inches(0.7), top=Inches(0.1), height=Inches(1))
 
             # --- Answer Slide ---
             slide_a = prs.slides.add_slide(prs.slide_layouts[6])  # Blank slide
