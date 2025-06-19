@@ -9,10 +9,13 @@ from pptx.dml.color import RGBColor
 import re
 from fractions import Fraction
 from sympy import symbols, Eq, solve, isprime
+import json
+import os
 
 x = symbols('x')
 
 levels_to_generate = [1,2,3,4,5,6,7,8,9]
+# levels_to_generate = [9]
 # Simple color name to RGB map
 COLOR_MAP = {
     "black": RGBColor(0, 0, 0),
@@ -22,29 +25,40 @@ COLOR_MAP = {
     "dark_gray": RGBColor(100, 100, 100),
 }
 
-fractions_unicode = {
-    "1/2": "½",
-    "1/3": "⅓", "2/3": "⅔",
-    "1/4": "¼", "3/4": "¾",
-    "1/5": "⅕", "2/5": "⅖", "3/5": "⅗", "4/5": "⅘",
-    "1/6": "⅙", "5/6": "⅚",
-    "1/7": "⅐", "2/7": "²⁄₇", "3/7": "³⁄₇", "4/7": "⁴⁄₇", "5/7": "⁵⁄₇", "6/7": "⁶⁄₇",
-    "1/8": "⅛", "3/8": "⅜", "5/8": "⅝", "7/8": "⅞",
-    "1/9": "⅑", "2/9": "²⁄₉", "4/9": "⁴⁄₉", "5/9": "⁵⁄₉", "7/9": "⁷⁄₉", "8/9": "⁸⁄₉",
-}
+# fractions_unicode = {
+#     "1/2": "½",
+#     "1/3": "⅓", "2/3": "⅔",
+#     "1/4": "¼", "3/4": "¾",
+#     "1/5": "⅕", "2/5": "⅖", "3/5": "⅗", "4/5": "⅘",
+#     "1/6": "⅙", "5/6": "⅚",
+#     "1/7": "⅐", "2/7": "²⁄₇", "3/7": "³⁄₇", "4/7": "⁴⁄₇", "5/7": "⁵⁄₇", "6/7": "⁶⁄₇",
+#     "1/8": "⅛", "3/8": "⅜", "5/8": "⅝", "7/8": "⅞",
+#     "1/9": "⅑", "2/9": "²⁄₉", "4/9": "⁴⁄₉", "5/9": "⁵⁄₉", "7/9": "⁷⁄₉", "8/9": "⁸⁄₉",
+# }
 # 'ax+b=c', 'a(x+b)=c', 'x+a=c', 'x-a=c', 'a*x=c'
+
+QUESTION_TYPE_FILE = "question_data.json"
+
+def load_question_types():
+    if os.path.exists(QUESTION_TYPE_FILE):
+        with open(QUESTION_TYPE_FILE, "r") as f:
+            return json.load(f)
+    return []
+
+question_typeX = load_question_types()
+
 question_type = {
     1: {
         "add": [
-            {"qty":30, "min": 0, "max": 6, "tiers": [1]},
-            {"qty":30, "min": [1,10], "max": [7,13], "tiers": [2]},
-            {"qty":30, "min": 10, "max": 25, "tiers": [3,4]},
+            {"qty":30, "min": [1,0], "max": [6,6], "tiers": [1]},
+            {"qty":30, "min": [1,4], "max": [6,10], "tiers": [2]},
+            {"qty":10, "min": [1,10], "max": [7,13], "tiers": [3]},
         ],
         "subtract": [
-            {"qty":30, "min": 1, "max": 20, "tiers": [3,4]},
+            {"qty":10, "min": [15,1], "max": [20,8], "tiers": [3,4]},
             ],
-        "multiply": [{"qty":10, "min": 1, "max": 5, "tiers": [4]}],
-        "place_value": [{"qty":20, "min": 1, "max": 99, "tiers": [3,4], "fontsize": 80}],
+        "multiply": [{"qty":10, "min": 1, "max": 8, "tiers": [4,5]}],
+        "place_value": [{"qty":10, "min": 1, "max": 99, "tiers": [3,4], "fontsize": 80}],
         "place_value_reverse": [{"qty":20, "min": 10, "max": 99, "tiers": [3,4,5], "fontsize": 80}],
     },
     2: {
@@ -196,64 +210,65 @@ question_type = {
     },
     8: {
         "add": [
-            {"qty":15, "min": 10, "max": 30, "tiers": range(1,2)},
-            {"qty":10, "min": 20, "max": 60, "tiers": range(2,3)},
-            ],
-        "add3": [{"qty":10, "min": 10, "max": 50, "tiers": range(3,5)}],
-        "perc10": [
-            {"qty":10, "min": 10, "max": 500, "tiers": range(3,5)}
-            ],
-        "add_dec1": [{"qty":10, "min": 1, "max": 20, "tiers": range(4,6)}],
-        "subtract": [
-            {"qty":15, "min": 5, "max": 30, "tiers": range(1,2)},
-            {"qty":10, "min": 10, "max": 50, "tiers": range(2,5)},
-            ],
-        "linear_equation_a*x=c": [
-            {"qty":15, "min": -10, "max": 10, "tiers": range(3,4), "fontsize": 90},
-            ],
-        "linear_equation_a(x+b)=c": [
-            {"qty":15, "min": -10, "max": 10, "tiers": range(4,5), "fontsize": 90},
-            ],
-        "linear_equation_ax+b=c": [
-            {"qty":15, "min": -10, "max": 10, "tiers": range(4,5), "fontsize": 90},
-            ],
-        "multiply": [
-            {"qty":10, "min": 6, "max": 10, "tiers": range(3,4)},
-            ],
-        "divide<11": [
-            {"qty":10, "min": 2, "max": 80, "tiers": range(4,6)}],
-        "place_value_reverse": [
-            {"qty":10, "min": 1000, "max": 99999, "tiers": range(3,6), "fontsize": 70}],
-        "add_fraction_same_denominator": [
-            {"qty":10, "min": 2, "max": 9, "tiers": range(2,3)}],
-        "add_fraction_different_denominator": [
-            {"qty":10, "min": 2, "max": 9, "tiers": range(4,6)}],
-    },
-    9: {
-        "add": [
             {"qty":15, "min": 10, "max": 30, "tiers": [1]},
-            {"qty":15, "min": [-10,1], "max": [-1,10], "tiers": [2]},
-            {"qty":15, "min": [-10,-10], "max": [-1,-1], "tiers": [3,4]},
+            {"qty":10, "min": 20, "max": 60, "tiers": [2]},
             ],
-        "add3": [
-            {"qty":10, "min": 10, "max": 70, "tiers": [3,4]}],
+        "add3": [{"qty":10, "min": 10, "max": 50, "tiers": [3,4]}],
         "perc10": [
-            {"qty":20, "min": 10, "max": 1000, "tiers": [3,4,5]}],
-        "add_dec1": [{"qty":20, "min": 1, "max": 20, "tiers": [4,5]}],
+            {"qty":10, "min": 10, "max": 500, "tiers": [3,4]}
+            ],
+        "add_dec1": [{"qty":10, "min": 1, "max": 20, "tiers": [4,5]}],
         "subtract": [
-            {"qty":15, "min": 5, "max": 20, "tiers": [1]},
-            {"qty":15, "min": 7, "max": 40, "tiers": [2]},
-            {"qty":20, "min": 7, "max": 60, "tiers": [3,4,5]},
-            {"qty":15, "min": [10,-20], "max": [50,-2], "tiers": [3,4,5]},
+            {"qty":15, "min": 5, "max": 30, "tiers": [1]},
+            {"qty":10, "min": 10, "max": 50, "tiers": [2,3,4]},
             ],
         "linear_equation_a*x=c": [
             {"qty":15, "min": -10, "max": 10, "tiers": [3], "fontsize": 90},
             ],
         "linear_equation_a(x+b)=c": [
-            {"qty":15, "min": -10, "max": 10, "tiers": [4], "fontsize": 90},
+            {"qty":15, "min": -10, "max": 10, "tiers": [4,5], "fontsize": 90},
             ],
         "linear_equation_ax+b=c": [
-            {"qty":15, "min": -10, "max": 10, "tiers": [4], "fontsize": 90},
+            {"qty":15, "min": -10, "max": 10, "tiers": [4,5], "fontsize": 90},
+            ],
+        "multiply": [
+            {"qty":10, "min": 6, "max": 10, "tiers": [3,4]},
+            ],
+        "divide<11": [
+            {"qty":10, "min": 2, "max": 80, "tiers": [4,5]}],
+        "place_value_reverse": [
+            {"qty":10, "min": 1000, "max": 99999, "tiers": [3,4,5], "fontsize": 70}],
+        "add_fraction_same_denominator": [
+            {"qty":10, "min": 2, "max": 9, "tiers": [2]},
+        ],
+        "add_fraction_different_denominator": [
+            {"qty":10, "min": 2, "max": 9, "tiers": [4,5]}],
+    },
+    9: {
+        "add": [
+            {"qty":15, "min": 10, "max": 30, "tiers": [1]},
+            {"qty":15, "min": [-10,1], "max": [-1,10], "tiers": [2]},
+            {"qty":10, "min": [-10,-10], "max": [-1,-1], "tiers": [3,4]},
+            ],
+        "add3": [
+            {"qty":10, "min": 10, "max": 70, "tiers": [3,4]}],
+        "perc10": [
+            {"qty":10, "min": 10, "max": 1000, "tiers": [3,4,5]}],
+        "add_dec1": [{"qty":20, "min": 1, "max": 20, "tiers": [4,5]}],
+        "subtract": [
+            {"qty":15, "min": 5, "max": 20, "tiers": [1]},
+            {"qty":15, "min": 7, "max": 40, "tiers": [2]},
+            {"qty":10, "min": 7, "max": 60, "tiers": [3,4,5]},
+            {"qty":10, "min": [10,-20], "max": [50,-2], "tiers": [3,4,5]},
+            ],
+        "linear_equation_a*x=c": [
+            {"qty":10, "min": -10, "max": 10, "tiers": [3], "fontsize": 90},
+            ],
+        "linear_equation_a(x+b)=c": [
+            {"qty":10, "min": -10, "max": 10, "tiers": [4], "fontsize": 90},
+            ],
+        "linear_equation_ax+b=c": [
+            {"qty":10, "min": -10, "max": 10, "tiers": [4], "fontsize": 90},
             ],
         "multiply": [
             {"qty":10, "min": 6, "max": 10, "tiers": [3]},
@@ -261,9 +276,9 @@ question_type = {
         "divide<11": [
             {"qty":10, "min": 2, "max": 80, "tiers": [4,5]}],
         "place_value_reverse": [
-            {"qty":10, "min": 1000, "max": 999999, "tiers": [3,4,5], "fontsize": 70}],
+            {"qty":5, "min": 1000, "max": 999999, "tiers": [3,4,5], "fontsize": 70}],
         "add_fraction_different_denominator": [
-            {"qty":20, "min": 2, "max": 9, "tiers": [3,4,5]}],
+            {"qty":10, "min": 2, "max": 9, "tiers": [3,4,5]}],
     },
 }
 
@@ -673,7 +688,7 @@ def set_slide_background(slide, red, green, blue):
 def main():
     # Generate questions for each level
     for level in question_type:
-        if level not in levels_to_generate:
+        if int(level) not in levels_to_generate:
             continue
 
         print(f"\nLevel {level} Questions:")

@@ -1,0 +1,1046 @@
+{
+  "1": {
+    "add": [
+      {
+        "qty": 30,
+        "min": [
+          1,
+          0
+        ],
+        "max": [
+          6,
+          6
+        ],
+        "tiers": [
+          1
+        ]
+      },
+      {
+        "qty": 30,
+        "min": [
+          1,
+          4
+        ],
+        "max": [
+          6,
+          10
+        ],
+        "tiers": [
+          2
+        ]
+      },
+      {
+        "qty": 10,
+        "min": [
+          1,
+          10
+        ],
+        "max": [
+          7,
+          13
+        ],
+        "tiers": [
+          3
+        ]
+      }
+    ],
+    "subtract": [
+      {
+        "qty": 10,
+        "min": [
+          15,
+          1
+        ],
+        "max": [
+          20,
+          8
+        ],
+        "tiers": [
+          3,
+          4
+        ]
+      }
+    ],
+    "multiply": [
+      {
+        "qty": 10,
+        "min": 1,
+        "max": 8,
+        "tiers": [
+          4,
+          5
+        ]
+      }
+    ],
+    "place_value": [
+      {
+        "qty": 10,
+        "min": 1,
+        "max": 99,
+        "tiers": [
+          3,
+          4
+        ],
+        "fontsize": 80
+      }
+    ],
+    "place_value_reverse": [
+      {
+        "qty": 20,
+        "min": 10,
+        "max": 99,
+        "tiers": [
+          3,
+          4,
+          5
+        ],
+        "fontsize": 80
+      }
+    ]
+  },
+  "2": {
+    "add": [
+      {
+        "qty": 30,
+        "min": 1,
+        "max": 9,
+        "tiers": [
+          1
+        ]
+      },
+      {
+        "qty": 15,
+        "min": [
+          2,
+          10
+        ],
+        "max": [
+          9,
+          20
+        ],
+        "tiers": [
+          2
+        ]
+      },
+      {
+        "qty": 30,
+        "min": 10,
+        "max": 30,
+        "tiers": [
+          3,
+          4
+        ]
+      }
+    ],
+    "add3": [
+      {
+        "qty": 15,
+        "min": 1,
+        "max": 10,
+        "tiers": [
+          4,
+          5
+        ]
+      }
+    ],
+    "subtract": [
+      {
+        "qty": 15,
+        "min": 1,
+        "max": 20,
+        "tiers": [
+          2
+        ]
+      },
+      {
+        "qty": 20,
+        "min": 5,
+        "max": 30,
+        "tiers": [
+          3,
+          4
+        ]
+      }
+    ],
+    "multiply": [
+      {
+        "qty": 20,
+        "min": 1,
+        "max": 10,
+        "tiers": [
+          3,
+          4,
+          5
+        ]
+      }
+    ],
+    "place_value": [
+      {
+        "qty": 10,
+        "min": 1,
+        "max": 999,
+        "tiers": [
+          3,
+          4
+        ],
+        "fontsize": 80
+      }
+    ],
+    "place_value_reverse": [
+      {
+        "qty": 10,
+        "min": 10,
+        "max": 9999,
+        "tiers": [
+          3,
+          4,
+          5
+        ],
+        "fontsize": 80
+      }
+    ]
+  },
+  "3": {
+    "add": [
+      {
+        "qty": 15,
+        "min": 5,
+        "max": 10,
+        "tiers": [
+          1
+        ]
+      },
+      {
+        "qty": 10,
+        "min": 10,
+        "max": 50,
+        "tiers": [
+          2
+        ]
+      },
+      {
+        "qty": 10,
+        "min": [
+          2,
+          15
+        ],
+        "max": [
+          9,
+          30
+        ],
+        "tiers": [
+          2
+        ]
+      }
+    ],
+    "subtract": [
+      {
+        "qty": 15,
+        "min": 5,
+        "max": 15,
+        "tiers": [
+          1
+        ]
+      },
+      {
+        "qty": 10,
+        "min": 10,
+        "max": 20,
+        "tiers": [
+          2
+        ]
+      }
+    ],
+    "add3": [
+      {
+        "qty": 20,
+        "min": 1,
+        "max": 20,
+        "tiers": [
+          3,
+          4
+        ]
+      }
+    ],
+    "multiply": [
+      {
+        "qty": 15,
+        "min": 2,
+        "max": 5,
+        "tiers": [
+          3
+        ]
+      },
+      {
+        "qty": 20,
+        "min": 4,
+        "max": 10,
+        "tiers": [
+          4,
+          5
+        ]
+      }
+    ],
+    "divide": [
+      {
+        "qty": 20,
+        "min": 1,
+        "max": 20,
+        "tiers": [
+          3,
+          4
+        ]
+      }
+    ],
+    "place_value_reverse": [
+      {
+        "qty": 20,
+        "min": 100,
+        "max": 9999,
+        "tiers": [
+          4,
+          5
+        ],
+        "fontsize": 80
+      }
+    ]
+  },
+  "4": {
+    "add": [
+      {
+        "qty": 15,
+        "min": [
+          2,
+          10
+        ],
+        "max": [
+          9,
+          15
+        ],
+        "tiers": [
+          1
+        ]
+      },
+      {
+        "qty": 15,
+        "min": 5,
+        "max": 15,
+        "tiers": [
+          1
+        ]
+      },
+      {
+        "qty": 15,
+        "min": 10,
+        "max": 20,
+        "tiers": [
+          2
+        ]
+      }
+    ],
+    "add3": [
+      {
+        "qty": 15,
+        "min": 2,
+        "max": 10,
+        "tiers": [
+          2
+        ]
+      }
+    ],
+    "add_fraction_same_denominator": [
+      {
+        "qty": 15,
+        "min": 2,
+        "max": 10,
+        "tiers": [
+          3,
+          4
+        ]
+      }
+    ],
+    "add_fraction_different_denominator": [
+      {
+        "qty": 15,
+        "min": 2,
+        "max": 6,
+        "tiers": [
+          4,
+          5
+        ]
+      }
+    ],
+    "subtract": [
+      {
+        "qty": 15,
+        "min": 5,
+        "max": 20,
+        "tiers": [
+          1
+        ]
+      },
+      {
+        "qty": 15,
+        "min": 10,
+        "max": 40,
+        "tiers": [
+          3,
+          4
+        ]
+      }
+    ],
+    "multiply": [
+      {
+        "qty": 15,
+        "min": 3,
+        "max": 7,
+        "tiers": [
+          3
+        ]
+      },
+      {
+        "qty": 15,
+        "min": 5,
+        "max": 10,
+        "tiers": [
+          3,
+          4
+        ]
+      }
+    ],
+    "divide": [
+      {
+        "qty": 20,
+        "min": 2,
+        "max": 100,
+        "tiers": [
+          3,
+          4,
+          5
+        ]
+      }
+    ],
+    "place_value_reverse": [
+      {
+        "qty": 20,
+        "min": 10,
+        "max": 9999,
+        "tiers": [
+          3,
+          4
+        ],
+        "fontsize": 70
+      }
+    ]
+  },
+  "5": {
+    "add": [
+      {
+        "qty": 30,
+        "min": [
+          2,
+          9
+        ],
+        "max": [
+          9,
+          20
+        ],
+        "tiers": [
+          1
+        ]
+      },
+      {
+        "qty": 15,
+        "min": 10,
+        "max": 30,
+        "tiers": [
+          2
+        ]
+      },
+      {
+        "qty": 10,
+        "min": 15,
+        "max": 50,
+        "tiers": [
+          3,
+          4,
+          5
+        ]
+      }
+    ],
+    "add3": [
+      {
+        "qty": 10,
+        "min": 5,
+        "max": 15,
+        "tiers": [
+          3,
+          4
+        ]
+      }
+    ],
+    "subtract": [
+      {
+        "qty": 15,
+        "min": 5,
+        "max": 20,
+        "tiers": [
+          2
+        ]
+      },
+      {
+        "qty": 15,
+        "min": 15,
+        "max": 40,
+        "tiers": [
+          3,
+          4
+        ]
+      }
+    ],
+    "multiply": [
+      {
+        "qty": 15,
+        "min": 3,
+        "max": 10,
+        "tiers": [
+          3
+        ]
+      }
+    ],
+    "divide": [
+      {
+        "qty": 15,
+        "min": 2,
+        "max": 100,
+        "tiers": [
+          4,
+          5
+        ]
+      }
+    ],
+    "place_value_reverse": [
+      {
+        "qty": 15,
+        "min": 100,
+        "max": 9999,
+        "tiers": [
+          3,
+          4,
+          5
+        ],
+        "fontsize": 70
+      }
+    ],
+    "add_dec1": [
+      {
+        "qty": 10,
+        "min": 1,
+        "max": 10,
+        "tiers": [
+          4,
+          5
+        ]
+      }
+    ],
+    "add_fraction_same_denominator": [
+      {
+        "qty": 15,
+        "min": 2,
+        "max": 10,
+        "tiers": [
+          3,
+          4
+        ]
+      }
+    ],
+    "add_fraction_different_denominator": [
+      {
+        "qty": 15,
+        "min": 2,
+        "max": 7,
+        "tiers": [
+          4,
+          5
+        ]
+      }
+    ]
+  },
+  "6": {
+    "add": [
+      {
+        "qty": 15,
+        "min": 10,
+        "max": 30,
+        "tiers": [
+          1
+        ]
+      },
+      {
+        "qty": 15,
+        "min": 20,
+        "max": 60,
+        "tiers": [
+          2
+        ]
+      }
+    ],
+    "add3": [
+      {
+        "qty": 10,
+        "min": 10,
+        "max": 40,
+        "tiers": [
+          3,
+          4
+        ]
+      }
+    ],
+    "perc10": [
+      {
+        "qty": 10,
+        "min": 10,
+        "max": 500,
+        "tiers": [
+          3,
+          4
+        ]
+      }
+    ],
+    "add_dec1": [
+      {
+        "qty": 10,
+        "min": 1,
+        "max": 10,
+        "tiers": [
+          4,
+          5
+        ]
+      }
+    ],
+    "subtract": [
+      {
+        "qty": 15,
+        "min": 5,
+        "max": 15,
+        "tiers": [
+          1
+        ]
+      },
+      {
+        "qty": 15,
+        "min": 10,
+        "max": 20,
+        "tiers": [
+          2
+        ]
+      },
+      {
+        "qty": 15,
+        "min": 15,
+        "max": 50,
+        "tiers": [
+          3,
+          4
+        ]
+      }
+    ],
+    "multiply": [
+      {
+        "qty": 30,
+        "min": 3,
+        "max": 100,
+        "tiers": 33
+      }
+    ],
+    "divide": [
+      {
+        "qty": 15,
+        "min": 2,
+        "max": 40,
+        "tiers": [
+          4,
+          5
+        ]
+      }
+    ],
+    "place_value_reverse": [
+      {
+        "qty": 15,
+        "min": 1000,
+        "max": 99999,
+        "tiers": [
+          3,
+          4,
+          5
+        ],
+        "fontsize": 70
+      }
+    ],
+    "add_fraction_same_denominator": [
+      {
+        "qty": 10,
+        "min": 2,
+        "max": 10,
+        "tiers": [
+          3
+        ]
+      }
+    ],
+    "add_fraction_different_denominator": [
+      {
+        "qty": 10,
+        "min": 2,
+        "max": 9,
+        "tiers": [
+          4
+        ]
+      }
+    ]
+  },
+  "7": {
+    "add": [
+      {
+        "qty": 15,
+        "min": 7,
+        "max": 25,
+        "tiers": [
+          1
+        ]
+      },
+      {
+        "qty": 10,
+        "min": 10,
+        "max": 50,
+        "tiers": [
+          2
+        ]
+      }
+    ],
+    "add3": [
+      {
+        "qty": 20,
+        "min": 10,
+        "max": 50,
+        "tiers": [
+          3,
+          4
+        ]
+      }
+    ],
+    "perc10": [
+      {
+        "qty": 10,
+        "min": 10,
+        "max": 500,
+        "tiers": [
+          3,
+          4
+        ]
+      }
+    ],
+    "add_dec1": [
+      {
+        "qty": 10,
+        "min": 1,
+        "max": 20,
+        "tiers": [
+          4,
+          5
+        ]
+      }
+    ],
+    "subtract": [
+      {
+        "qty": 15,
+        "min": 5,
+        "max": 20,
+        "tiers": [
+          1
+        ]
+      },
+      {
+        "qty": 10,
+        "min": 10,
+        "max": 30,
+        "tiers": [
+          2
+        ]
+      },
+      {
+        "qty": 10,
+        "min": 10,
+        "max": 50,
+        "tiers": [
+          3,
+          4
+        ]
+      }
+    ],
+    "multiply": [
+      {
+        "qty": 10,
+        "min": 6,
+        "max": 10,
+        "tiers": [
+          2
+        ]
+      }
+    ],
+    "divide<11": [
+      {
+        "qty": 10,
+        "min": 2,
+        "max": 80,
+        "tiers": [
+          4,
+          5
+        ]
+      }
+    ],
+    "place_value_reverse": [
+      {
+        "qty": 15,
+        "min": 1000,
+        "max": 99999,
+        "tiers": [
+          3,
+          4,
+          5
+        ],
+        "fontsize": 70
+      }
+    ],
+    "add_fraction_same_denominator": [
+      {
+        "qty": 10,
+        "min": 2,
+        "max": 9,
+        "tiers": [
+          3
+        ]
+      }
+    ],
+    "add_fraction_different_denominator": [
+      {
+        "qty": 20,
+        "min": 2,
+        "max": 9,
+        "tiers": [
+          4,
+          5
+        ]
+      }
+    ],
+    "linear_equation_a*x=c": [
+      {
+        "qty": 15,
+        "min": -10,
+        "max": 10,
+        "tiers": [
+          3,
+          4
+        ],
+        "fontsize": 90
+      }
+    ]
+  },
+  "9": {
+    "add": [
+      {
+        "qty": 15,
+        "min": 10,
+        "max": 30,
+        "tiers": [
+          1
+        ]
+      },
+      {
+        "qty": 15,
+        "min": [
+          -10,
+          1
+        ],
+        "max": [
+          -1,
+          10
+        ],
+        "tiers": [
+          2
+        ]
+      },
+      {
+        "qty": 15,
+        "min": [
+          -10,
+          -10
+        ],
+        "max": [
+          -1,
+          -1
+        ],
+        "tiers": [
+          3,
+          4
+        ]
+      }
+    ],
+    "add3": [
+      {
+        "qty": 10,
+        "min": 10,
+        "max": 70,
+        "tiers": [
+          3,
+          4
+        ]
+      }
+    ],
+    "perc10": [
+      {
+        "qty": 20,
+        "min": 10,
+        "max": 1000,
+        "tiers": [
+          3,
+          4,
+          5
+        ]
+      }
+    ],
+    "add_dec1": [
+      {
+        "qty": 20,
+        "min": 1,
+        "max": 20,
+        "tiers": [
+          4,
+          5
+        ]
+      }
+    ],
+    "subtract": [
+      {
+        "qty": 15,
+        "min": 5,
+        "max": 20,
+        "tiers": [
+          1
+        ]
+      },
+      {
+        "qty": 15,
+        "min": 7,
+        "max": 40,
+        "tiers": [
+          2
+        ]
+      },
+      {
+        "qty": 20,
+        "min": 7,
+        "max": 60,
+        "tiers": [
+          3,
+          4,
+          5
+        ]
+      },
+      {
+        "qty": 15,
+        "min": [
+          10,
+          -20
+        ],
+        "max": [
+          50,
+          -2
+        ],
+        "tiers": [
+          3,
+          4,
+          5
+        ]
+      }
+    ],
+    "linear_equation_a*x=c": [
+      {
+        "qty": 15,
+        "min": -10,
+        "max": 10,
+        "tiers": [
+          3
+        ],
+        "fontsize": 90
+      }
+    ],
+    "linear_equation_a(x+b)=c": [
+      {
+        "qty": 15,
+        "min": -10,
+        "max": 10,
+        "tiers": [
+          4
+        ],
+        "fontsize": 90
+      }
+    ],
+    "linear_equation_ax+b=c": [
+      {
+        "qty": 15,
+        "min": -10,
+        "max": 10,
+        "tiers": [
+          4
+        ],
+        "fontsize": 90
+      }
+    ],
+    "multiply": [
+      {
+        "qty": 10,
+        "min": 6,
+        "max": 10,
+        "tiers": [
+          3
+        ]
+      }
+    ],
+    "divide<11": [
+      {
+        "qty": 10,
+        "min": 2,
+        "max": 80,
+        "tiers": [
+          4,
+          5
+        ]
+      }
+    ],
+    "place_value_reverse": [
+      {
+        "qty": 10,
+        "min": 1000,
+        "max": 999999,
+        "tiers": [
+          3,
+          4,
+          5
+        ],
+        "fontsize": 70
+      }
+    ],
+    "add_fraction_different_denominator": [
+      {
+        "qty": 20,
+        "min": 2,
+        "max": 9,
+        "tiers": [
+          3,
+          4,
+          5
+        ]
+      }
+    ]
+  }
+}
