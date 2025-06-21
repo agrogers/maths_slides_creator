@@ -15,7 +15,7 @@ import os
 x = symbols('x')
 
 levels_to_generate = [1,2,3,4,5,6,7,8,9]
-# levels_to_generate = [9]
+levels_to_generate = [7,8,9]
 # Simple color name to RGB map
 COLOR_MAP = {
     "black": RGBColor(0, 0, 0),
@@ -179,10 +179,10 @@ question_type = {
     },
     7: {
         "add": [
-            {"qty":15, "min": 7, "max": 25, "tiers": [1]},
-            {"qty":10, "min": 10, "max": 50, "tiers": [2]},
+            {"qty":15, "min": [5,10], "max": [10,20], "tiers": [1]},
+            {"qty":10, "min": [10,15], "max": [20,30], "tiers": [2]},
             ],
-        "add3": [{"qty":20, "min": 10, "max": 50, "tiers": [3,4]}],
+        "add3": [{"qty":20, "min": [3,10,15], "max": [10,20,30], "tiers": [3,4]}],
         "perc10": [
             {"qty":10, "min": 10, "max": 500, "tiers": [3,4]}
             ],
@@ -191,7 +191,6 @@ question_type = {
         "subtract": [
             {"qty":15, "min": 5, "max": 20, "tiers": [1]},
             {"qty":10, "min": 10, "max": 30, "tiers": [2]},
-            {"qty":10, "min": 10, "max": 50, "tiers": [3,4]},
             ],
         "multiply": [
             {"qty":10, "min": 6, "max": 10, "tiers": [2]},
@@ -205,15 +204,28 @@ question_type = {
         "add_fraction_different_denominator": [
             {"qty":20, "min": 2, "max": 9, "tiers": [4,5]}],
         "linear_equation_a*x=c": [
-            {"qty":15, "min": -10, "max": 10, "tiers": [3,4], "fontsize": 90},
+            {"qty":10, "min": 1, "max": 10, "tiers": [3,4], "fontsize": 90},
             ],
+        "linear_equation_a(x+b)=c": [
+            {"qty":20, "min": 1, "max": 10, "tiers": [4,5], "fontsize": 90},
+            ],
+        "linear_equation_ax+b=c": [
+            {"qty":20, "min": 1, "max": 10, "tiers": [4,5], "fontsize": 90},
+            ],
+        "linear_equation_x+a=c": [
+            {"qty":10, "min": 1, "max": 10, "tiers": [4], "fontsize": 90},
+            ],
+        "linear_equation_x-a=c": [
+            {"qty":10, "min": 1, "max": 10, "tiers": [4], "fontsize": 90},
+            ],
+
     },
     8: {
         "add": [
-            {"qty":15, "min": 10, "max": 30, "tiers": [1]},
-            {"qty":10, "min": 20, "max": 60, "tiers": [2]},
+            {"qty":15, "min": 6, "max": 20, "tiers": [1]},
+            {"qty":10, "min": 10, "max": 30, "tiers": [2]},
             ],
-        "add3": [{"qty":10, "min": 10, "max": 50, "tiers": [3,4]}],
+        "add3": [{"qty":20, "min": [3,10,15], "max": [12,20,50], "tiers": [3,4]}],
         "perc10": [
             {"qty":10, "min": 10, "max": 500, "tiers": [3,4]}
             ],
@@ -226,10 +238,16 @@ question_type = {
             {"qty":15, "min": -10, "max": 10, "tiers": [3], "fontsize": 90},
             ],
         "linear_equation_a(x+b)=c": [
-            {"qty":15, "min": -10, "max": 10, "tiers": [4,5], "fontsize": 90},
+            {"qty":20, "min": 1, "max": 10, "tiers": [4,5], "fontsize": 90},
             ],
         "linear_equation_ax+b=c": [
-            {"qty":15, "min": -10, "max": 10, "tiers": [4,5], "fontsize": 90},
+            {"qty":20, "min": 1, "max": 10, "tiers": [3,4,5], "fontsize": 90},
+            ],
+        "linear_equation_x+a=c": [
+            {"qty":10, "min": 1, "max": 10, "tiers": [4], "fontsize": 90},
+            ],
+        "linear_equation_x-a=c": [
+            {"qty":10, "min": 1, "max": 10, "tiers": [4], "fontsize": 90},
             ],
         "multiply": [
             {"qty":10, "min": 6, "max": 10, "tiers": [3,4]},
@@ -245,6 +263,47 @@ question_type = {
             {"qty":10, "min": 2, "max": 9, "tiers": [4,5]}],
     },
     9: {
+        "add": [
+            {"qty":15, "min": 10, "max": 20, "tiers": [1]},
+            {"qty":15, "min": [-10,1], "max": [-1,10], "tiers": [2]},
+            {"qty":10, "min": [-10,-10], "max": [-1,10], "tiers": [3,4]},
+            ],
+        "add3": [{"qty":20, "min": [3,10,15], "max": [20,40,50], "tiers": [3,4]}],
+        "perc10": [
+            {"qty":10, "min": 10, "max": 1000, "tiers": [3,4,5]}],
+        "add_dec1": [{"qty":20, "min": 1, "max": 20, "tiers": [4,5]}],
+        "subtract": [
+            {"qty":15, "min": [10,5], "max": [20,15], "tiers": [1]},
+            {"qty":15, "min": [15,7], "max": [40,17], "tiers": [2]},
+            {"qty":10, "min": [20,7], "max": [60,30], "tiers": [3,4,5]},
+            {"qty":10, "min": [10,-20], "max": [50,-2], "tiers": [3,4,5]},
+            ],
+        "linear_equation_a*x=c": [
+            {"qty":10, "min": -10, "max": 10, "tiers": [3], "fontsize": 90},
+            ],
+        "linear_equation_a(x+b)=c": [
+            {"qty":20, "min": -10, "max": 10, "tiers": [4,5], "fontsize": 90},
+            ],
+        "linear_equation_ax+b=c": [
+            {"qty":20, "min": -10, "max": 10, "tiers": [4,5], "fontsize": 90},
+            ],
+        "linear_equation_x+a=c": [
+            {"qty":10, "min": -10, "max": 10, "tiers": [4], "fontsize": 90},
+            ],
+        "linear_equation_x-a=c": [
+            {"qty":10, "min": -10, "max": 10, "tiers": [4], "fontsize": 90},
+            ],
+        "multiply": [
+            {"qty":10, "min": 6, "max": 10, "tiers": [3]},
+            ],
+        "divide<11": [
+            {"qty":10, "min": 2, "max": 80, "tiers": [4,5]}],
+        "place_value_reverse": [
+            {"qty":15, "min": 1000, "max": 999999, "tiers": [3,4,5], "fontsize": 70}],
+        "add_fraction_different_denominator": [
+            {"qty":20, "min": 2, "max": 9, "tiers": [3,4,5]}],
+    },
+    10: {
         "add": [
             {"qty":15, "min": 10, "max": 30, "tiers": [1]},
             {"qty":15, "min": [-10,1], "max": [-1,10], "tiers": [2]},
@@ -280,6 +339,7 @@ question_type = {
         "add_fraction_different_denominator": [
             {"qty":10, "min": 2, "max": 9, "tiers": [3,4,5]}],
     },
+
 }
 
 def unicode_fraction(numerator, denominator):
@@ -468,7 +528,11 @@ def generate_question(op_type, min_val, max_val, tier, tier_range):
         return question, f"{answer:,}"
     
     elif op_type == "add3":  # New operation for adding three numbers
-        c = generate_number(min_val, max_val, tier, tier_range)
+        if isinstance(min_val, list) and isinstance(max_val, list):
+            b = generate_number(min_val[1], max_val[1], tier, tier_range)
+            c = generate_number(min_val[2], max_val[2], tier, tier_range)
+        else:
+            c = generate_number(min_val, max_val, tier, tier_range)
         question = f"{a} + {b} + {c}"
         answer = a + b + c
         return question, f"{answer:,}"
@@ -493,7 +557,7 @@ def generate_question(op_type, min_val, max_val, tier, tier_range):
         elif a < b:      # Ensure non-negative result by making a >= b
             a, b = b, a  # Swap if a < b
         if a == b:
-            a += 1
+            a += 2
         question = f"{a} - {b}"
         answer = a - b
         return question, f"{answer:,}"
